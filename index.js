@@ -16,7 +16,7 @@ const {
 app.use(cors());
 app.use(bodyParser.json());
 
-connectDb();
+connectDb(); // establish a database connection while server starts
 
 app.post("/registration", (apiReq, apiRes) => {
   handleRegistration(apiReq, apiRes);
