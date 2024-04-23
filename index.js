@@ -8,6 +8,8 @@ const {
   handleRegistration,
   handleLogin,
   handleCreateBooking,
+  handleMyBookings,
+  handleCancelBooking,
 } = require("./service");
 
 app.use(cors());
@@ -25,6 +27,14 @@ app.get("/login/:username/:password", (apiReq, apiRes) => {
 
 app.post("/createBooking", (apiReq, apiRes) => {
   handleCreateBooking(apiReq, apiRes);
+});
+
+app.get("/mybookings/:username", (apiReq, apiRes) => {
+  handleMyBookings(apiReq, apiRes);
+});
+
+app.put("/cancelBooking/:username/:bookingId", (apiReq, apiRes) => {
+  handleCancelBooking(apiReq, apiRes);
 });
 
 app.get("/", (req, res) => {

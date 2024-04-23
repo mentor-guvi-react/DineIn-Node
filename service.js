@@ -1,4 +1,5 @@
 const { RegistrationModel, BookingModel } = require("./Schema");
+const { ObjectId } = require("mongodb");
 
 const handleRegistration = async (apiReq, apiRes) => {
   console.log(apiReq.body);
@@ -60,6 +61,7 @@ const handleCreateBooking = async (apiReq, apiRes) => {
       selectedDate,
       username,
       restaurentId,
+      isCancelled: false,
     });
     if (dbResponse?._id) {
       apiRes.send(dbResponse);
@@ -70,8 +72,45 @@ const handleCreateBooking = async (apiReq, apiRes) => {
   apiRes.send("Invalid data for booking");
 };
 
+const handleMyBookings = async (apiReq, apiRes) => {
+  const { username } = apiReq.params;
+
+  if (username?.length) {
+    const dbResponse = await BookingModel.find({
+      username,
+    });
+
+    if (dbResponse) {
+      apiRes.send(dbResponse);
+      return;
+    }
+  }
+
+  apiRes.send("cant fetch details");
+};
+
+const handleCancelBooking = async (apiReq, apiRes) => {
+  const { username, bookingId } = apiReq.params;
+
+  if (username?.length && bookingId?.length) {
+    const filter = {
+      _id: new ObjectId(bookingId),
+    };
+    const update = { isCancelled: true };
+    const dbResponse = await BookingModel.findOneAndUpdate(filter, update);
+
+    if (dbResponse) {
+      apiRes.send("Cancelled Success");
+      return;
+    }
+  }
+  apiRes.send("Cancelled Failed");
+};
+
 module.exports = {
   handleRegistration,
   handleLogin,
   handleCreateBooking,
+  handleMyBookings,
+  handleCancelBooking,
 };
