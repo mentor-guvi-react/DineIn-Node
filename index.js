@@ -10,6 +10,7 @@ const {
   handleCreateBooking,
   handleMyBookings,
   handleCancelBooking,
+  handledBookedSlots,
 } = require("./service");
 
 app.use(cors());
@@ -35,6 +36,10 @@ app.get("/mybookings/:username", (apiReq, apiRes) => {
 
 app.put("/cancelBooking/:username/:bookingId", (apiReq, apiRes) => {
   handleCancelBooking(apiReq, apiRes);
+});
+
+app.get("/bookedSlots/:restaurentId/:selectedDate", (apiReq, apiRes) => {
+  handledBookedSlots(apiReq, apiRes);
 });
 
 app.get("/", (req, res) => {

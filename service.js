@@ -107,10 +107,23 @@ const handleCancelBooking = async (apiReq, apiRes) => {
   apiRes.send("Cancelled Failed");
 };
 
+const handledBookedSlots = async (apiReq, apiRes) => {
+  const { restaurentId, selectedDate } = apiReq.params;
+  const dbResponse = await BookingModel.find({
+    restaurentId,
+    selectedDate,
+  });
+  if (dbResponse?.length) {
+    const slots = dbResponse.map((res) => res.selectedTime);
+    apiRes.send(slots);
+  }
+};
+
 module.exports = {
   handleRegistration,
   handleLogin,
   handleCreateBooking,
   handleMyBookings,
   handleCancelBooking,
+  handledBookedSlots,
 };
